@@ -5,6 +5,7 @@
     <link>https://practicalgobook.net/</link>
     <description>Recent posts from on Practical Go - Building Scalable Network and Non-network Applications</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://practicalgobook.net/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Tue, 14 Sep 2021 05:06:44 +0000</lastBuildDate><atom:link href="https://practicalgobook.net/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
