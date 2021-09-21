@@ -24,7 +24,7 @@ metaDataFormat= "yaml"
   headerTitle = "Practical Go - Building Scalable Network and Non-Network Applications"
   copyright = "© 2021 Amit Saha.  <a href=\"https://creativecommons.org/licenses/by/4.0/\">Some rights reserved</a>."
   name = ""
-  img = "img/book_cover.jpg"
+  img = "img/book_cover.png"
   img_title = "Book Cover"
   icon = "img/logo.png"
   quote = "Patterns to implement robust command line, HTTP and gRPC applications in Go"
@@ -39,11 +39,11 @@ metaDataFormat= "yaml"
 
   [[params.social]]
     name = "twitter"
-    url  = "https://twitter.com/"
+    url  = "https://twitter.com/practicalgo"
 
   [[params.social]]
     name = "github"
-    url  = "https://github.com/"
+    url  = "https://github.com/practicalgo"
 
 [params.style]
   # add path to custom CSS files here
@@ -62,7 +62,6 @@ metaDataFormat= "yaml"
     name       = "Posts"
     url        = "post/"
 
-  
 [markup]
   defaultMarkdownHandler = "goldmark"
   [markup.asciidocExt]
