@@ -11,7 +11,7 @@ unsafe= true
 
 [params]
   description = "Book website for Practical Go, a book by Amit Saha"
-  mainSection = "posts"
+  mainSection = "about"
   showAllPostsOnHomePage = true
   postsOnHomePage = 20 
   tagsOverview = true
@@ -38,8 +38,18 @@ unsafe= true
     weight = 1
 
 [[menu.main]]
-    name = "About"
-    url = "/about"
+    name = "Table of Contents"
+    url = "/toc"
+    weight = 1
+
+[[menu.main]]
+    name = "Code"
+    url = "/code"
+    weight = 1
+
+[[menu.main]]
+    name = "Resources"
+    url = "/resources"
     weight = 1
 
 [[menu.main]]

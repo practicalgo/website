@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>updates on Practical Go - Book Website</title>
+    <link>https://practicalgobook.net/categories/updates/</link>
+    <description>Recent content in updates on Practical Go - Book Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 24 Sep 2021 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://practicalgobook.net/categories/updates/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+    
+    
+    <item>
+      <title>Hello world</title>
+      <link>https://practicalgobook.net/posts/hello_world/</link>
+      <pubDate>Fri, 24 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://practicalgobook.net/posts/hello_world/</guid>
+      <description>Hi there, just an example blog post.</description>
+    </item>
+    
+    
+  </channel>
+</rss>
