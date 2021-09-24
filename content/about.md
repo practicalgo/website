@@ -1,6 +1,11 @@
 ---
 title: "About"
-date: 2021-09-14T05:06:44Z
+date: 2021-09-24
 ---
 
-Hi there, this is book website.
+# About
+
+This is the website for the book, "Practical Go", written by [Amit Saha](https://echorand.me)
+and published by Wiley.
+
+# Contact
