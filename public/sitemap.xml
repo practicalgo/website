@@ -2,24 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://practicalgobook.net/</loc>
+    <loc>http://practicalgobook.net/</loc>
     <lastmod>2021-09-24T15:21:06+10:00</lastmod>
   </url><url>
-    <loc>https://practicalgobook.net/categories/</loc>
+    <loc>http://practicalgobook.net/categories/</loc>
     <lastmod>2021-09-24T15:07:11+10:00</lastmod>
   </url><url>
-    <loc>https://practicalgobook.net/code/</loc>
+    <loc>http://practicalgobook.net/code/</loc>
     <lastmod>2021-09-24T15:21:06+10:00</lastmod>
   </url><url>
-    <loc>https://practicalgobook.net/posts/hello_world/</loc>
+    <loc>http://practicalgobook.net/posts/hello_world/</loc>
     <lastmod>2021-09-24T15:07:11+10:00</lastmod>
   </url><url>
-    <loc>https://practicalgobook.net/posts/</loc>
+    <loc>http://practicalgobook.net/posts/</loc>
     <lastmod>2021-09-24T15:07:11+10:00</lastmod>
   </url><url>
-    <loc>https://practicalgobook.net/categories/updates/</loc>
+    <loc>http://practicalgobook.net/categories/updates/</loc>
     <lastmod>2021-09-24T15:07:11+10:00</lastmod>
   </url><url>
-    <loc>https://practicalgobook.net/tags/</loc>
+    <loc>http://practicalgobook.net/tags/</loc>
   </url>
 </urlset>

@@ -1,4 +1,4 @@
-baseURL = "https://practicalgobook.net"
+baseURL = "http://practicalgobook.net"
 languageCode = "en-us"
 title = "Practical Go - Book Website"
 theme = "etch"
