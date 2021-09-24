@@ -1,6 +1,14 @@
-# Source for https://echorand.me
+# Source for https://practicalgobook.net
 
-![CI](https://github.com/amitsaha/echorand.me/workflows/CI/badge.svg?branch=master)
+Hugo + go:embed magic.
 
-This is [hugo](https://gohugo.io/) source for https://echorand.me hosted via GitHub pages 
-at [amitsaha.github.io](https://github.com/amitsaha/amitsaha.github.io)
+## Infrastructure
+
+AWS load balancer (443) -> Private EC2 instance (8080) -> Go server
+
+## Deploying
+
+```
+ssh-add -K ~/.ssh/<ssh-key>
+ssh -A -i ~/.ssh/<ssh key> ec2-user@ec2-3-25-87-17.ap-southeast-2.compute.amazonaws.com
+```
