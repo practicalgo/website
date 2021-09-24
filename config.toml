@@ -33,6 +33,11 @@ unsafe= true
   tag = "tags"
 
 [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+
+[[menu.main]]
     name = "Posts"
     url = "/posts"
     weight = 1

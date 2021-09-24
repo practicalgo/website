@@ -1,0 +1,9 @@
+[Unit]
+Description=Practical Go Website
+
+[Service]
+Environment="LISTEN_ADDR=:8080"
+ExecStart=/usr/local/bin/practicalgo-website
+User=nobody
+
+[Install]
