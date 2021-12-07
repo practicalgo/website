@@ -1,8 +1,7 @@
 ---
-title: "buy"
+title: "Buy the book!"
 date: 2021-12-08
 ---
-
 
 You can have a look at a detailed [table of contents](./toc). You can read an excerpt from the first chapter
 [here](https://media.wiley.com/product_data/excerpt/14/11197738/1119773814-39.pdf).

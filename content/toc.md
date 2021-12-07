@@ -1,5 +1,5 @@
 ---
-title: "toc"
+title: "Table of Contents"
 date: 2021-12-08
 ---
 
