@@ -7,13 +7,12 @@ import (
 	"os"
 )
 
-//go:embed posts code
-//go:embed index.html index.xml sitemap.xml
-//go:embed categories css images
+//go:embed categories code css images posts tags  
+//go:embed Caddyfile DEPLOY.md go.mod index.html index.xml practicalgowebsite.service server.go sitemap.xml  
 var siteData embed.FS
 
 func main() {
-	listenAddr := ":80"
+	listenAddr := ""
 	if len(os.Getenv("LISTEN_ADDR")) != 0 {
 		listenAddr = os.Getenv("LISTEN_ADDR")
 
