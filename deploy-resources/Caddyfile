@@ -1,0 +1,6 @@
+practicalgobook.net {
+	 reverse_proxy localhost:8080
+         handle_errors {
+	         respond "I will be back soon!"
+         }
+}

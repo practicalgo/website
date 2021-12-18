@@ -33,11 +33,6 @@ unsafe= true
   tag = "tags"
 
 [[menu.main]]
-    name = "Home"
-    url = "/"
-    weight = 1
-
-[[menu.main]]
     name = "Table of Contents"
     url = "/toc"
     weight = 1

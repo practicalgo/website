@@ -7,8 +7,8 @@ import (
 	"os"
 )
 
-//go:embed buy categories code css images posts tags toc  
-//go:embed book_cover.jpg go.mod index.html index.xml server.go sitemap.xml  
+//go:embed buy categories code css images posts support tags toc  
+//go:embed book_cover.jpg go.mod index.html index.xml server server.go sitemap.xml  
 var siteData embed.FS
 
 func main() {

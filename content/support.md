@@ -1,9 +1,9 @@
 ---
 title: "Support"
-date: 2021-12-17T21:38:10+11:00
+date: 2021-12-17
 ---
 
-# Installing OpenSSL on Windows
+## Installing OpenSSL on Windows
 
 We didn't cover installation of `openssl` on Windows in the book. 
 

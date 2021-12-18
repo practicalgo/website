@@ -196,6 +196,7 @@ main#content #toc ol li:before {
 main#content img {
     max-width: 100%;
     margin: 0 auto;
+    margin-left: auto;
 }
 
 main#content figure {
