@@ -54,11 +54,10 @@ unsafe= true
     weight = 1
 
 [[menu.main]]
-    name = "Resources"
-    url = "/resources"
+    name = "Support"
+    url = "/support"
     weight = 1
 
 [[menu.main]]
     name = "Subscribe (RSS)"
-    url = "/index.xml" 
-    
+    url = "/index.xml"  

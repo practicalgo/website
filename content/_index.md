@@ -11,7 +11,8 @@ You can read an excerpt from the first chapter
 [here](https://media.wiley.com/product_data/excerpt/14/11197738/1119773814-39.pdf).
 
 
-You can have a look at a detailed [table of contents](./toc), [download](./code) the source and look at [resources](./resources) to continue your Go journey. Of course, if you like the look of it, you can buy a copy using one of the
+You can have a look at a detailed [table of contents](./toc), [download](./code) the source and look at [support](./support) for resources that may have been referred to in the book or simply additional
+relevant pointers. Of course, if you like the look of it, you can buy a copy using one of the
 resources listed on the [buy](./buy) page.
 
 You can email the author at **mail AT practicalgobook.net** for any queries, submit
