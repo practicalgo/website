@@ -5,10 +5,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/slayer/autorestart"
 )
 
-//go:embed buy categories code css images posts support tags toc  
-//go:embed book_cover.jpg go.mod index.html index.xml server server.go sitemap.xml  
+//go:embed buy categories code css images posts support tags toc
+//go:embed book_cover.jpg go.mod index.html index.xml sitemap.xml
 var siteData embed.FS
 
 func main() {
@@ -20,6 +22,15 @@ func main() {
 	mux := http.NewServeMux()
 	staticFileServer := http.FileServer(http.FS(siteData))
 	mux.Handle("/", staticFileServer)
+
+	// Notifier
+	restart := autorestart.GetNotifier()
+	go func() {
+		<-restart
+		log.Printf("Detected change in binary. Restarting.")
+	}()
+
+	autorestart.StartWatcher()
 
 	log.Fatal(http.ListenAndServe(listenAddr, mux))
 }
