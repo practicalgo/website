@@ -38,6 +38,12 @@ unsafe= true
     weight = 1
 
 [[menu.main]]
+    name = "Blog"
+    url = "/posts"
+    weight = 1
+
+
+[[menu.main]]
     name = "Buy the book!"
     url = "/buy"
     weight = 1

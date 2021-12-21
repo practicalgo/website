@@ -18,16 +18,5 @@
     
     
     
-    
-    <item>
-      <title>Hello world</title>
-      <link>https://practicalgobook.net/posts/hello_world/</link>
-      <pubDate>Fri, 24 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://practicalgobook.net/posts/hello_world/</guid>
-      <description>Hi there, just an example blog post.</description>
-    </item>
-    
-    
   </channel>
 </rss>

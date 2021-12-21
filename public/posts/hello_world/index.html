@@ -15,6 +15,8 @@
     <nav>
         <ul>
             <li>
+                <a href="/posts" title="">Blog</a>
+            </li><li>
                 <a href="/buy" title="">Buy the book!</a>
             </li><li>
                 <a href="/code" title="">Code</a>
@@ -31,11 +33,34 @@
 <main id="content">
 <article>
     <header id="post-header">
-        <h1>Hello world</h1><time>September 24, 2021</time></header><p>Hi there, just an example blog post.</p>
+        <h1>Hello world</h1><time>September 24, 2021</time></header><p>Hello everyone. &ldquo;Practical Go: Building Scalable Network and Non-Network Applications&rdquo; is now out
+electronically as well as in print.</p>
+<p>The book targets readers who have learned the Go language basics - syntax, understanding of types,
+being able to write functions (details are available in the &ldquo;Getting started&rdquo; chapter - but essentially,
+just a passing familiarity with the language is enough I think). I say that and reasonably confidently
+since that&rsquo;s where I was when I started writing this book. I wrote this book, not to share with you things
+I already knew - far from it. The book is essentially a documentation of my journey of learning Go and applying
+it to solve problems which I think based on my experience are being solved by folks in the industry a.k.a
+real world today.</p>
+<p>The book consists of 11 chapters, a Getting Started guide and two Appendices.</p>
+<p>In Getting Started, I guide you through the installation of the software required for the book. I also discuss some of the assumed knowledge for the following chapters.</p>
+<p>In Chapters 1 and 2, I show how to write command line applications using the standard library’s flag package.</p>
+<p>In Chapters 3 and 4, I show how you can write robust HTTP clients, using the standard library’s net/http package and friends.</p>
+<p>In Chapters 5, 6 and 7, I show how you can build production ready HTTP servers using net/http
+and related packages from the standard library.</p>
+<p>In Chapters 8, 9 and 10, I show how you can build production ready gRPC applications using the Go gRPC implementation.</p>
+<p>In Chapter 11, I show how you can work with two categories of data stores - Object store and a SQL data store using the <a href="https://gocloud.dev">https://gocloud.dev</a> library.</p>
+<p>In Apendix A, you will learn to implement instrumentation in applications to emit telemetry data - Logs, Metrics, and Traces.</p>
+<p>In Appendix B, you will learn to read configuration data in your application, learn to build a container image for your application and get some guidance around deploying your applications.</p>
+<p>You can find a detailed table of contents here: <a href="https://practicalgobook.net/toc/">https://practicalgobook.net/toc/</a> along with a link to an excerpt of Chapter 1.
+Any further questions, let me know, i will be happy to answer!</p>
+<p>You can subscribe to the blog using your favorite <a href="https://practicalgobook.net/index.xml">RSS reader</a>. You can also follow
+the book&rsquo;s <a href="https://twitter.com/practicalgobook">Twitter account</a>.</p>
+<p>In the next post, I will share how this website is hosted! Hint: it&rsquo;s a Go HTTP Server.</p>
 </article>
 <footer id="footer">
-    Post managed in a <a href="https://github.com/amitsaha/echorand.me">git repo</a> | <a href="https://github.com/amitsaha/echorand.me/commit/5e53657052f2a50bfe34aa1dc50c247c1f7a7597">Last Commit on this post </a>
-  | <a href="https://github.com/amitsaha/echorand.me/edit/master/content/posts/hello_world.md">Edit post</a>
+    Post managed in a <a href="https://github.com/practicalgo/website/">git repo</a> | <a href="https://github.com/practicalgo/website/commit/5e53657052f2a50bfe34aa1dc50c247c1f7a7597">Last Commit on this post </a>
+  | <a href="https://github.com/practicalgo/website/edit/master/content/posts/hello_world.md">Edit post</a>
     <p>
     Blog managed via <a href="https://gohugo.io/">Hugo</a> and using a modified version of the <a href="https://themes.gohugo.io/etch/">Etch</a> theme.
     </p>  
