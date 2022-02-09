@@ -6,8 +6,21 @@
     <description>Recent content in Categories on Practical Go - Book Website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Wed, 22 Dec 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://practicalgobook.net/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+    <item>
+      <title>Hello world</title>
+      <link>https://practicalgobook.net/posts/hello_world/</link>
+      <pubDate>Wed, 22 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://practicalgobook.net/posts/hello_world/</guid>
+      <description>Hello everyone. &amp;ldquo;Practical Go: Building Scalable Network and Non-Network Applications&amp;rdquo; is now out electronically as well as in print.
+The book targets readers who have learned the Go language basics - syntax, understanding of types, being able to write functions (details are available in the &amp;ldquo;Getting started&amp;rdquo; chapter - but essentially, just a passing familiarity with the language is enough I think). I say that and reasonably confidently since that&amp;rsquo;s where I was when I started writing this book.</description>
+    </item>
     
     
     

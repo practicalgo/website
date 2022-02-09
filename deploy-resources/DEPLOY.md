@@ -9,8 +9,9 @@
 
 *new site update*
 
+- GOOS=linux GOARCH=amd64 go build
 - scp server root@ip:/usr/local/bin/practicalgo-website-1
-- ssh root@ip mv /usr/local/bin/practicalgo-website-1 /usr/local/practicalgo-website
+- ssh root@ip mv /usr/local/bin/practicalgo-website-1 /usr/local/bin/practicalgo-website
 - automatic restart and update!
 
 *gotchas*
