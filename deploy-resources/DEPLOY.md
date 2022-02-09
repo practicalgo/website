@@ -7,6 +7,12 @@
 6. Start caddy
 
 
+*new site update*
+
+- scp server root@ip:/usr/local/bin/practicalgo-website-1
+- ssh root@ip mv /usr/local/bin/practicalgo-website-1 /usr/local/practicalgo-website
+- automatic restart and update!
+
 *gotchas*
 
 - firewalld
