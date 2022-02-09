@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/facebookgo/grace/gracehttp"
 	"github.com/slayer/autorestart"
 )
 
@@ -14,6 +15,7 @@ import (
 var siteData embed.FS
 
 func main() {
+	logger := log.New(os.Stdout, "INFO: ", log.Lshortfile)
 	listenAddr := ":8080"
 	if len(os.Getenv("LISTEN_ADDR")) != 0 {
 		listenAddr = os.Getenv("LISTEN_ADDR")
@@ -23,14 +25,20 @@ func main() {
 	staticFileServer := http.FileServer(http.FS(siteData))
 	mux.Handle("/", staticFileServer)
 
-	// Notifier
+	srv := http.Server{
+		Addr:    listenAddr,
+		Handler: mux,
+	}
+
+	autorestart.RestartFunc = autorestart.SendSIGUSR2
 	restart := autorestart.GetNotifier()
 	go func() {
 		<-restart
-		log.Printf("Detected change in binary. Restarting.")
+		logger.Printf("Detected change in binary. Restarting.")
 	}()
 
 	autorestart.StartWatcher()
 
-	log.Fatal(http.ListenAndServe(listenAddr, mux))
+	gracehttp.SetLogger(logger)
+	logger.Fatalf("Server terminating: %v", gracehttp.Serve(&srv))
 }
