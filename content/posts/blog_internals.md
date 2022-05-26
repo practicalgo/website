@@ -1,5 +1,5 @@
 ---
-title:  How is practicalgobook.net reaching you?
+title:  Writing the practicalgobook.net server program
 date: 2022-07-27
 categories:
 -  articles
