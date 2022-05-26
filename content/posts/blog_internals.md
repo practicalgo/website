@@ -1,5 +1,5 @@
 ---
-title:  Writing the practicalgobook.net server program
+title:  The server powering practicalgobook.net
 date: 2022-07-27
 categories:
 -  articles
