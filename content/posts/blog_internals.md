@@ -20,8 +20,7 @@ implementing advanced features. Let's dive in!
 
 ## Content delivery
 
-The first iteration
-
+The first working iteration of the server looked as follows:
 
 ```go
 package main
@@ -31,16 +30,15 @@ import (
 	"log"
 	"net/http"
 	"os"
+)
 
-	)
-
-//go:embed buy categories code css images posts support tags toc
-//go:embed book_cover.jpg go.mod index.html index.xml sitemap.xml
+//go:embed posts code
+//go:embed index.html index.xml sitemap.xml
+//go:embed categories css images
 var siteData embed.FS
 
 func main() {
-	logger := log.New(os.Stdout, "INFO: ", log.Lshortfile)
-	listenAddr := ":8080"
+	listenAddr := ":80"
 	if len(os.Getenv("LISTEN_ADDR")) != 0 {
 		listenAddr = os.Getenv("LISTEN_ADDR")
 
@@ -49,12 +47,16 @@ func main() {
 	staticFileServer := http.FileServer(http.FS(siteData))
 	mux.Handle("/", staticFileServer)
 
-	srv := http.Server{
-		Addr:    listenAddr,
-		Handler: mux,
-	}	
+	log.Fatal(http.ListenAndServe(listenAddr, mux))
 }
 ```
+
+The key standrad libraries here are:
+
+- embed
+- net/http
+**[**
+
 
 ## Zero-downtime update
 
