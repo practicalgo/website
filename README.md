@@ -1,6 +1,6 @@
 # Source for https://practicalgobook.net
 
-Hugo + go:embed magic - checkout the [GopherCon 2021 lightning talk](https://www.youtube.com/watch?v=XnPHI6cCL7E&t=10221s)
+Hugo + go:embed magic - checkout the [GopherCon 2021 lightning talk](https://www.youtube.com/watch?v=y6VnTM1f2cc)
 
 ## Infrastructure
 
