@@ -125,8 +125,12 @@ To summarize, at this stage, I had:
 I was happy with the progress at this stage, but then I found an issue.
 
 When I wanted to update my blog, I had to stop and start my application which meant there was downtime! And considering that this is a very important
-website, I couldn't have that. So I sought out to fix that.
+website, I couldn't have that. 
+
+So I set out to fix that.
 
 ## Zero-downtime update
+
+
 
 ## Summary
