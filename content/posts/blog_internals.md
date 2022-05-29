@@ -1,9 +1,8 @@
 ---
 title:  The server powering practicalgobook.net
-date: 2022-07-27
+date: 2022-07-30
 categories:
 -  articles
-draft: true
 ---
 I write my blog posts in Markdown format,  and then use the excellent [Hugo](https://gohugo.io/) static site 
 generator to generate HTML files. The topic of this blog post is how those HTML files are served
@@ -118,7 +117,7 @@ the expense of running a cloud managed load balancer.
 
 To summarize, at this stage, I had:
 
-- I a Go server containing all my blog's files. All I had to do is build my application and copy it to the host using `scp`. I didn't need to copy the contents separately! My blog was *just* an executable.
+- I have a Go server containing all my blog's files. All I had to do is build my application and copy it to the host using `scp`. I didn't need to copy the contents separately! My blog was *just* an executable.
 - It ran on address specified, `:8080` which I specified via `LISTEN_ADDR` environment variable
 - I used Caddy which ran on port 443 and port 80 to give me free HTTPS and forwarded traffic to the Go server on port 8080. I had https://practicalgobook.net website working (Traffic flow: Browser -> Virtual Machine -> Caddy (443) -> Go server (running on port 8080)
 - No third party libraries
@@ -189,11 +188,127 @@ And thanks to `slayer/autorestart`, my application reloads itself and my new con
 
 To summarize, at this stage, I had:
 
-- I a Go server containing all my blog's files. All I had to do is build my application and copy it to the host using `scp`. I didn't need to copy the contents separately! My blog was *just* an executable.
+- I have a Go server containing all my blog's files. All I had to do is build my application and copy it to the host using `scp`. I didn't need to copy the contents separately! My blog was *just* an executable.
 - It ran on address specified, `:8080` which I specified via `LISTEN_ADDR` environment variable
 - I used Caddy which ran on port 443 and port 80 to give me free HTTPS and forwarded traffic to the Go server on port 8080. I had https://practicalgobook.net website working (Traffic flow: Browser -> Virtual Machine -> Caddy (443) -> Go server (running on port 8080)
 - Using [slayer/autorestart](https://github.com/slayer/autorestart), I had implemented an automatically updating running server
 
-However, for the automatic update to be running, there was a new process being created, which meant, connections were being dropped.
+However, for the automatic update to be running, the old process was being terminated and a new process being created, which meant, 
+connections were being dropped and that is simply not an option. 
+
+So, time to fix that.
+
+## Zero downtime updates
+
+Now, I "knew" that on Linux, network sockets are file descriptors and that you child processes inherit parent's opened file descriptors. 
+But I didn't know enough to  implement it myself. From the README of `slayer/autorestart`, I saw a reference to an unmaintained project 
+[facebookgo/grace](https://github.com/facebookgo/grace) which seemed very relevant to what I was looking for. So, I integrated my server with
+the `grace/gracehttp` package:
+
+```go
+package main
+
+import (
+	"embed"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/facebookgo/grace/gracehttp"
+	"github.com/slayer/autorestart"
+)
+
+//go:embed buy categories code css images posts support tags toc
+//go:embed book_cover.jpg go.mod index.html index.xml sitemap.xml
+var siteData embed.FS
+
+func main() {
+	logger := log.New(os.Stdout, "INFO: ", log.Lshortfile)
+	listenAddr := ":8080"
+	if len(os.Getenv("LISTEN_ADDR")) != 0 {
+		listenAddr = os.Getenv("LISTEN_ADDR")
+
+	}
+	mux := http.NewServeMux()
+	staticFileServer := http.FileServer(http.FS(siteData))
+	mux.Handle("/", staticFileServer)
+
+	srv := http.Server{
+		Addr:    listenAddr,
+		Handler: mux,
+	}
+
+	autorestart.RestartFunc = autorestart.SendSIGUSR2
+	restart := autorestart.GetNotifier()
+	go func() {
+		<-restart
+		logger.Printf("Detected change in binary. Restarting.")
+	}()
+
+	autorestart.StartWatcher()
+
+	gracehttp.SetLogger(logger)
+	logger.Fatalf("Server terminating: %v", gracehttp.Serve(&srv))
+}
+
+```
+
+I alluded to running the Go server as a systemd service above, here's the systemd service file:
+
+```
+[Unit]
+Description=Practical Go Website
+
+[Service]
+Environment="LISTEN_ADDR=:8080"
+ExecStart=/usr/local/bin/practicalgo-website
+User=nobody
+
+[Install]
+WantedBy=multi-user.target
+```
+
+I also added in systemd socket activation for my server using the following
+`.socket` file:
+
+```
+[Socket]
+ListenStream = 8080
+BindIPv6Only = both
+
+[Install]
+WantedBy = sockets.target
+```
+
+The summary of the above changes results in the following behavior:
+
+- When a request comes in, and if my application is not already running, systemd will automatically start it (thanks to socket activation!)
+- When `slayer/autorestart` detects a change in binary, it sends itself the `SIGUSR2` signal
+- `facebook/grace/gracehttp`, upon getting this signal activates its machinery of ensuring that the new process's underlying TCP 
+  listeners are created from the already opened file descriptors and thus ensuring no current HTTP requests are dropped
+  
+Thus, as it stands today:
+
+- I have a Go server containing all my blog's files. All I had to do is build my application and copy it to the host using `scp`. I didn't need to copy the contents separately! My blog was *just* an executable.
+- It ran on address specified, `:8080` which I specified via `LISTEN_ADDR` environment variable
+- I used Caddy which ran on port 443 and port 80 to give me free HTTPS and forwarded traffic to the Go server on port 8080. I had https://practicalgobook.net website working (Traffic flow: Browser -> Virtual Machine -> Caddy (443) -> Go server (running on port 8080)
+- Using [slayer/autorestart](https://github.com/slayer/autorestart), I had implemented an automatically updating running server
+- Using [systemd socket activation](http://0pointer.de/blog/projects/socket-activation.html) and [facebookgo/grace/gracehttp](https://github.com/facebookarchive/grace/tree/master/gracehttp), I have a zero-downtime server application.
 
 ## Summary
+
+In the book, we make heavy use of `net/http` standard library package and I allude to how useful the
+`embed` package can be. I hope you found this post useful and showed you a practical way to use them together. 
+
+While writing this post, especially, the last section, I sensed a disconnect in my understanding between why I needed the socket activation, other
+than the initial automatic startup of the server. Was it also needed for the graceful restart? I will need to dig in a bit more again. 
+
+You can find the source code for the server in the file, [server.go](https://github.com/practicalgo/website/blob/main/public/server.go) and other
+resources that are needed to deploy [here](https://github.com/practicalgo/website/tree/main/deploy-resources).
+
+If you are curious to learn more systemd socket activation and Go applications, please refer this post: https://mgdm.net/weblog/systemd-socket-activation/.
+
+Finally, I got very curious about how `facebook/grace/gracehttp` worked and was able to implement a proof of concept myself only for TCP network sockets from 
+scratch. Here's some code, without any documentation [here](https://github.com/amitsaha/go-tcp-handover). 
+
+I have a plan to replace my use of both the third party libraries with my code for this server.
