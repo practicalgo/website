@@ -121,16 +121,79 @@ To summarize, at this stage, I had:
 - I a Go server containing all my blog's files. All I had to do is build my application and copy it to the host using `scp`. I didn't need to copy the contents separately! My blog was *just* an executable.
 - It ran on address specified, `:8080` which I specified via `LISTEN_ADDR` environment variable
 - I used Caddy which ran on port 443 and port 80 to give me free HTTPS and forwarded traffic to the Go server on port 8080. I had https://practicalgobook.net website working (Traffic flow: Browser -> Virtual Machine -> Caddy (443) -> Go server (running on port 8080)
+- No third party libraries
 
 I was happy with the progress at this stage, but then I found an issue.
 
-When I wanted to update my blog, I had to stop and start my application which meant there was downtime! And considering that this is a very important
-website, I couldn't have that. 
+When I wanted to update my blog, I had to stop and start my application manually and which meant there was downtime.
 
-So I set out to fix that.
+And considering that this is a very important website, I couldn't have that. So I set out to fix that.
 
-## Zero-downtime update
+## Automating restart on updates
 
+My first plan was, "yeah, I will create a new executable and simply overwrite the existing one in place and then find a way to reload it".
+You can't, you will get a "Text file busy" error as [explained here](http://wiki.wlug.org.nz/ETXTBSY). Now, of course, even if I could copy
+it in place, reloading itself would need some work, notable have a way to indicate to the program and "please reload yourself". And that
+exploration led me to [slayer/autorestart](https://github.com/slayer/autorestart) package and I integrated it as follows:
 
+```
+package main
+
+import (
+	"embed"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/slayer/autorestart"
+)
+
+//go:embed buy categories code css images posts support tags toc
+//go:embed book_cover.jpg go.mod index.html index.xml sitemap.xml
+var siteData embed.FS
+
+func main() {
+	listenAddr := ":8080"
+	if len(os.Getenv("LISTEN_ADDR")) != 0 {
+		listenAddr = os.Getenv("LISTEN_ADDR")
+
+	}
+	mux := http.NewServeMux()
+	staticFileServer := http.FileServer(http.FS(siteData))
+	mux.Handle("/", staticFileServer)
+
+	// Notifier
+	restart := autorestart.GetNotifier()
+	go func() {
+		<-restart
+		log.Printf("Detected change in binary. Restarting.")
+	}()
+
+	autorestart.StartWatcher()
+	log.Fatal(http.ListenAndServe(listenAddr, mux))
+}
+```
+
+At this stage, my blog updates looked like:
+
+```bash
+$ GOOS=linux GOARCH=amd64 go build
+$ scp server root@<ip-address>:/usr/local/bin/practicalgo-website-1
+$ ssh root@ip mv /usr/local/bin/practicalgo-website-1 /usr/local/bin/practicalgo-website
+```
+
+I get around the "Text file busy" error by creating a temporary file and then using the `mv` command which uses
+the atomic [rename()](https://stackoverflow.com/questions/7054844/is-rename-atomic#7054851) system call.
+
+And thanks to `slayer/autorestart`, my application reloads itself and my new content becomes available to the world wide web!
+
+To summarize, at this stage, I had:
+
+- I a Go server containing all my blog's files. All I had to do is build my application and copy it to the host using `scp`. I didn't need to copy the contents separately! My blog was *just* an executable.
+- It ran on address specified, `:8080` which I specified via `LISTEN_ADDR` environment variable
+- I used Caddy which ran on port 443 and port 80 to give me free HTTPS and forwarded traffic to the Go server on port 8080. I had https://practicalgobook.net website working (Traffic flow: Browser -> Virtual Machine -> Caddy (443) -> Go server (running on port 8080)
+- Using [slayer/autorestart](https://github.com/slayer/autorestart), I had implemented an automatically updating running server
+
+However, for the automatic update to be running, there was a new process being created, which meant, connections were being dropped.
 
 ## Summary
