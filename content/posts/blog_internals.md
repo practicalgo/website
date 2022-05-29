@@ -28,7 +28,7 @@ for implementing advanced features.
 
 Let's dive in!
 
-## Content delivery
+## Content delivery - Proof of Concept
 
 The first working iteration of the server looked as follows:
 
@@ -61,15 +61,37 @@ func main() {
 }
 ```
 
-The key standrad libraries here are:
+The key standrad libraries used in this iteration were [embed](https://pkg.go.dev/embed) and [net/http](https://pkg.go.dev/net/http).
 
-- embed
-- net/http
+The `embed` package allowed me build an executable Go application containing all the blog content. As you can see in the `//go:embed`
+directives, I include all the directories that `hugo` generated in the default, `public` directory inside the application as
+a variable `siteData` of [embed.FS](https://pkg.go.dev/embed#FS) type.
 
+Once this was done, I use the [http.FileServer](https://pkg.go.dev/net/http#FileServer) handler to serve the files that were embedded
+and available to the application via the `siteData` variable.
+
+`http.FileServer` expects an argument of a type which implements the [http.FileSystem](https://pkg.go.dev/net/http#FileSystem) interface.
+
+`siteData` which is of type `embed.FS` implements the [fs.FS](https://pkg.go.dev/io/fs#FS) interface and hence, we use the [http.FS](https://pkg.go.dev/net/http#FS) function to convert `siteData` to a value of type `http.FileSystem` and thus, we have the following code snippet above:
+
+```go
+mux := http.NewServeMux()
+staticFileServer := http.FileServer(http.FS(siteData))
+mux.Handle("/", staticFileServer)
+```
+
+Then, we call the `ListenAndServe()` function to start the HTTP server on the address specified in `listenAddr`.
+
+You can see that the default value of `listenAddr` is port 80 - a privileged port which means I needed super-user permissions to run it.
+At this stage, thus I had:
+
+- I a Go server containing all my blog's files. All I had to do is build my application and copy it to the host using `scp`. I didn't need to copy the contents separately! My blog was *just* an executable.
+- It ran on port 80, which means, I had http://practicalgobook.net website working (note the HTTP)
+
+
+## Content Delivery - HTTPS and Reverse proxy
 
 
 ## Zero-downtime update
-
-## Reverse proxy and TLS certificate management
 
 ## Summary
