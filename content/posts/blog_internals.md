@@ -4,9 +4,13 @@ date: 2022-07-30
 categories:
 -  articles
 ---
-I write my blog posts in Markdown format,  and then use the excellent [Hugo](https://gohugo.io/) static site 
+
+I write my blog posts in Markdown format,  and then use [Hugo](https://gohugo.io/) static site 
 generator to generate HTML files. The topic of this blog post is how those HTML files are served
-to you.
+to you. 
+
+If you happened to come across my [GopherCon 2021 lightning talk](https://www.youtube.com/watch?v=y6VnTM1f2cc),
+this blog post describes the topic in all the gory detail!
 
 ## Background
 
@@ -298,8 +302,7 @@ Thus, as it stands today:
 ## Summary
 
 In the book, we make heavy use of `net/http` standard library package and I allude to how useful the
-`embed` package can be. I hope you found this post useful and showed you a practical way to use them together. 
-
+`embed` package can be. I hope you found this post useful and showed you a practical way to use them together. As I mentioned in my [GopherCon 2021 lightning talk](https://www.youtube.com/watch?v=y6VnTM1f2cc), there was no problem to solve here, but it proved to be a very fulfilling learning exercise for me.
 While writing this post, especially, the last section, I sensed a disconnect in my understanding between why I needed the socket activation, other
 than the initial automatic startup of the server. Was it also needed for the graceful restart? I will need to dig in a bit more again. 
 
