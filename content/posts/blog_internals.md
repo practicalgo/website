@@ -12,6 +12,13 @@ to you.
 If you happened to come across my [GopherCon 2021 lightning talk](https://www.youtube.com/watch?v=y6VnTM1f2cc),
 this blog post describes the topic in all the gory detail!
 
+- [Background](#background)
+- [Content delivery - Proof of Concept](#content-delivery---proof-of-concept)
+- [Content Delivery - Caddy as a reverse proxy](#content-delivery---caddy-as-a-reverse-proxy)
+- [Automating restart on updates](#automating-restart-on-updates)
+- [Zero downtime updates](#zero-downtime-updates)
+- [Summary](#summary)
+
 ## Background
 
 When you type in https://practicalgobook.net in your browser (or click it from somewhere), a translation,
