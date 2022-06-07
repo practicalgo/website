@@ -60,5 +60,10 @@ unsafe= true
     weight = 1
 
 [[menu.main]]
+    name = "Errata"
+    url = "/errata"
+    weight = 1
+
+[[menu.main]]
     name = "Subscribe (RSS)"
     url = "/index.xml"  
