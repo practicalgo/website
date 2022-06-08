@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Book website for Practical Go, a book by Amit Saha">
+    
+    <link rel="shortcut icon" href="https://practicalgobook.net/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <title>Errata</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://practicalgobook.net">Practical Go - Book Website</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/posts" title="">Blog</a>
+            </li><li>
+                <a href="/buy" title="">Buy the book!</a>
+            </li><li>
+                <a href="/code" title="">Code</a>
+            </li><li>
+                <a href="/errata" title="">Errata</a>
+            </li><li>
+                <a href="/support" title="">Support</a>
+            </li><li>
+                <a href="/toc" title="">Table of Contents</a>
+            </li><li>
+                <a href="/index.xml" title="">Subscribe (RSS)</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>Errata</h1><time>June 6, 2022</time></header><p>If you find an error, please let me know: <a href="mailto:mail@practicalgobook.net">mail@practicalgobook.net</a></p>
+<h2 id="chapter-1">Chapter 1</h2>
+<p><em>Page 5 (Electronic and Print)</em></p>
+<p>Current <code>greetUser()</code> function is missing a closing paren in the arguments. The fixed version:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">greetUser</span>(<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Writer</span>) {
+        <span style="color:#75715e">// function body remains same
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>(Thanks to Max Wolffe for reporting)</p>
+</article>
+<footer id="footer">
+    Post managed in a <a href="https://github.com/practicalgo/website/">git repo</a> | <a href="https://github.com/practicalgo/website/commit/26d5c7d003f9141a39b521741dfaf98d38a774d1">Last Commit on this post </a>
+  | <a href="https://github.com/practicalgo/website/edit/master/content/errata.md">Edit post</a>
+    <p>
+    Blog managed via <a href="https://gohugo.io/">Hugo</a> and using a modified version of the <a href="https://themes.gohugo.io/etch/">Etch</a> theme.
+    </p>  
+</footer>
+
+        </main><footer id="footer">
+    
+</footer>
+</body>
+</html>
