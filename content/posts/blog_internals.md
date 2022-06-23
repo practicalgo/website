@@ -1,5 +1,5 @@
 ---
-title:  The server powering practicalgobook.net
+title: The server powering practicalgobook.net
 date: 2022-07-30
 categories:
 -  articles
