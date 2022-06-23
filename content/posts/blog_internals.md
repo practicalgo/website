@@ -1,6 +1,6 @@
 ---
 title: The server powering practicalgobook.net
-date: 2022-07-30
+date: 2022-05-30
 categories:
 -  articles
 ---

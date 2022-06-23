@@ -15,6 +15,19 @@
     
     
     <item>
+      <title>The server powering practicalgobook.net</title>
+      <link>https://practicalgobook.net/posts/blog_internals/</link>
+      <pubDate>Mon, 30 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://practicalgobook.net/posts/blog_internals/</guid>
+      <description>I write my blog posts in Markdown format, and then use Hugo static site generator to generate HTML files. The topic of this blog post is how those HTML files are served to you.
+If you happened to come across my GopherCon 2021 lightning talk, this blog post describes the topic in all the gory detail!
+Background Content delivery - Proof of Concept Content Delivery - Caddy as a reverse proxy Automating restart on updates Zero downtime updates Summary Background When you type in https://practicalgobook.</description>
+    </item>
+    
+    
+    
+    <item>
       <title>Hello world</title>
       <link>https://practicalgobook.net/posts/hello_world/</link>
       <pubDate>Wed, 22 Dec 2021 00:00:00 +0000</pubDate>
