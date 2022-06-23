@@ -3,6 +3,8 @@ title: The server powering practicalgobook.net
 date: 2022-05-30
 categories:
 -  articles
+aliases:
+- /practicalgobook_net/
 ---
 
 I write my blog posts in Markdown format,  and then use [Hugo](https://gohugo.io/) static site 
