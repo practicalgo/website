@@ -8,7 +8,8 @@ You can download the ZIP file containing all the code discussed in the book
 from WILEY's page for the book [here](https://www.wiley.com/en-in/Practical+Go%3A+Building+Scalable+Network+and+Non+Network+Applications-p-9781119773818). Look for the DOWNLOADS
 section.
 
-You can also clone the git repository from [here](https://github.com/practicalgo/code).
+You can also clone the git repository from [here](https://github.com/practicalgo/code) or download a ZIP file
+of the [latest release](https://github.com/practicalgo/code/releases/tag/v1.0.1).
 
 
 ## Solutions to Exercises

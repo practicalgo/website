@@ -19,3 +19,13 @@ func greetUser(c config, name string, w io.Writer) {
 ```
 
 (Thanks to Max Wolffe for reporting)
+
+*Listing 1.1*
+
+The function definition of `validateArgs()` should check that, the user hasn't
+specified the `-h` flag.
+
+Reported as a [GitHub issue](https://github.com/practicalgo/code/issues/5) and
+[fixed]() by [titoe218](https://github.com/titoe218). 
+
+(Thanks titoe218 and daniel-lee-tech)

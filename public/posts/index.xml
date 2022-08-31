@@ -6,9 +6,24 @@
     <description>Recent content in Posts on Practical Go - Book Website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 30 May 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 31 Aug 2022 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://practicalgobook.net/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+    <item>
+      <title>Source Code and Errata Updates</title>
+      <link>https://practicalgobook.net/posts/new_code_release_1_1/</link>
+      <pubDate>Wed, 31 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://practicalgobook.net/posts/new_code_release_1_1/</guid>
+      <description>I have published a new version of the source code accompanying the book.
+You can find the v1.0.1 release here.
+I am extremely thankful to the folks who reported and participated in the issues and pull requests.
+The errata page has also been updated with a new error reported.
+If you find a bug or missing source code, please file a GitHub issue or contact me at mail@practicalgobook.net.</description>
+    </item>
     
     
     
@@ -22,7 +37,7 @@
       <guid>https://practicalgobook.net/posts/blog_internals/</guid>
       <description>I write my blog posts in Markdown format, and then use Hugo static site generator to generate HTML files. The topic of this blog post is how those HTML files are served to you.
 If you happened to come across my GopherCon 2021 lightning talk, this blog post describes the topic in all the gory detail!
-Background Content delivery - Proof of Concept Content Delivery - Caddy as a reverse proxy Automating restart on updates Zero downtime updates Summary Background When you type in https://practicalgobook.</description>
+ Background Content delivery - Proof of Concept Content Delivery - Caddy as a reverse proxy Automating restart on updates Zero downtime updates Summary  Background When you type in https://practicalgobook.</description>
     </item>
     
     

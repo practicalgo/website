@@ -63,33 +63,33 @@ for implementing advanced features.</p>
 <p>Let&rsquo;s dive in!</p>
 <h2 id="content-delivery---proof-of-concept">Content delivery - Proof of Concept</h2>
 <p>The first working iteration of the server looked as follows:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;embed&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed posts code
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed index.html index.xml sitemap.xml
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed categories css images
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">siteData</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">listenAddr</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;:80&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;LISTEN_ADDR&#34;</span>)) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">listenAddr</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;LISTEN_ADDR&#34;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">staticFileServer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FileServer</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FS</span>(<span style="color:#a6e22e">siteData</span>))
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">staticFileServer</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#a6e22e">listenAddr</span>, <span style="color:#a6e22e">mux</span>))
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>The key standrad libraries used in this iteration were <a href="https://pkg.go.dev/embed">embed</a> and <a href="https://pkg.go.dev/net/http">net/http</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;embed&#34;</span>
+	<span style="color:#e6db74">&#34;log&#34;</span>
+	<span style="color:#e6db74">&#34;net/http&#34;</span>
+	<span style="color:#e6db74">&#34;os&#34;</span>
+)
+
+<span style="color:#75715e">//go:embed posts code
+</span><span style="color:#75715e">//go:embed index.html index.xml sitemap.xml
+</span><span style="color:#75715e">//go:embed categories css images
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">siteData</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">listenAddr</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;:80&#34;</span>
+	<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;LISTEN_ADDR&#34;</span>)) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+		<span style="color:#a6e22e">listenAddr</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;LISTEN_ADDR&#34;</span>)
+
+	}
+	<span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+	<span style="color:#a6e22e">staticFileServer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FileServer</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FS</span>(<span style="color:#a6e22e">siteData</span>))
+	<span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">staticFileServer</span>)
+
+	<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ListenAndServe</span>(<span style="color:#a6e22e">listenAddr</span>, <span style="color:#a6e22e">mux</span>))
+}
+</code></pre></div><p>The key standrad libraries used in this iteration were <a href="https://pkg.go.dev/embed">embed</a> and <a href="https://pkg.go.dev/net/http">net/http</a>.</p>
 <p>The <code>embed</code> package allowed me build an executable Go application containing all the blog content. As you can see in the <code>//go:embed</code>
 directives, I include all the directories that <code>hugo</code> generated in the default, <code>public</code> directory inside the application as
 a variable <code>siteData</code> of <a href="https://pkg.go.dev/embed#FS">embed.FS</a> type.</p>
@@ -97,10 +97,10 @@ a variable <code>siteData</code> of <a href="https://pkg.go.dev/embed#FS">embed.
 and available to the application via the <code>siteData</code> variable.</p>
 <p><code>http.FileServer</code> expects an argument of a type which implements the <a href="https://pkg.go.dev/net/http#FileSystem">http.FileSystem</a> interface.</p>
 <p><code>siteData</code> which is of type <code>embed.FS</code> implements the <a href="https://pkg.go.dev/io/fs#FS">fs.FS</a> interface and hence, we use the <a href="https://pkg.go.dev/net/http#FS">http.FS</a> function to convert <code>siteData</code> to a value of type <code>http.FileSystem</code> and thus, we have the following code snippet above:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">staticFileServer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FileServer</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FS</span>(<span style="color:#a6e22e">siteData</span>))
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">staticFileServer</span>)
-</span></span></code></pre></div><p>Then, we call the <code>ListenAndServe()</code> function to start the HTTP server on the address specified in <code>listenAddr</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+<span style="color:#a6e22e">staticFileServer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FileServer</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FS</span>(<span style="color:#a6e22e">siteData</span>))
+<span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">staticFileServer</span>)
+</code></pre></div><p>Then, we call the <code>ListenAndServe()</code> function to start the HTTP server on the address specified in <code>listenAddr</code>.</p>
 <p>To summarize, at this stage, I had:</p>
 <ul>
 <li>I a Go server containing all my blog&rsquo;s files. All I had to do is build my application and copy it to the host using <code>scp</code>. I didn&rsquo;t need to copy the contents separately! My blog was <em>just</em> an executable.</li>
@@ -121,7 +121,7 @@ I gave Caddy a go.</p>
 <pre tabindex="0"><code>practicalgobook.net {
     reverse_proxy localhost:8080
         handle_errors {
-	     respond &#34;I will be back soon!&#34;
+	     respond &quot;I will be back soon!&quot;
         }
 }
 </code></pre><p>And that&rsquo;s it! I started <code>caddy</code> using the systemd service, started my Go application using a systemd service and I had HTTPS working again without
@@ -144,12 +144,12 @@ exploration led me to <a href="https://github.com/slayer/autorestart">slayer/aut
 <pre tabindex="0"><code>package main
 
 import (
-	&#34;embed&#34;
-	&#34;log&#34;
-	&#34;net/http&#34;
-	&#34;os&#34;
+	&quot;embed&quot;
+	&quot;log&quot;
+	&quot;net/http&quot;
+	&quot;os&quot;
 
-	&#34;github.com/slayer/autorestart&#34;
+	&quot;github.com/slayer/autorestart&quot;
 )
 
 //go:embed buy categories code css images posts support tags toc
@@ -157,30 +157,30 @@ import (
 var siteData embed.FS
 
 func main() {
-	listenAddr := &#34;:8080&#34;
-	if len(os.Getenv(&#34;LISTEN_ADDR&#34;)) != 0 {
-		listenAddr = os.Getenv(&#34;LISTEN_ADDR&#34;)
+	listenAddr := &quot;:8080&quot;
+	if len(os.Getenv(&quot;LISTEN_ADDR&quot;)) != 0 {
+		listenAddr = os.Getenv(&quot;LISTEN_ADDR&quot;)
 
 	}
 	mux := http.NewServeMux()
 	staticFileServer := http.FileServer(http.FS(siteData))
-	mux.Handle(&#34;/&#34;, staticFileServer)
+	mux.Handle(&quot;/&quot;, staticFileServer)
 
 	// Notifier
 	restart := autorestart.GetNotifier()
 	go func() {
 		&lt;-restart
-		log.Printf(&#34;Detected change in binary. Restarting.&#34;)
+		log.Printf(&quot;Detected change in binary. Restarting.&quot;)
 	}()
 
 	autorestart.StartWatcher()
 	log.Fatal(http.ListenAndServe(listenAddr, mux))
 }
 </code></pre><p>At this stage, my blog updates looked like:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>amd64 go build
-</span></span><span style="display:flex;"><span>$ scp server root@&lt;ip-address&gt;:/usr/local/bin/practicalgo-website-1
-</span></span><span style="display:flex;"><span>$ ssh root@ip mv /usr/local/bin/practicalgo-website-1 /usr/local/bin/practicalgo-website
-</span></span></code></pre></div><p>I get around the &ldquo;Text file busy&rdquo; error by creating a temporary file and then using the <code>mv</code> command which uses
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>amd64 go build
+$ scp server root@&lt;ip-address&gt;:/usr/local/bin/practicalgo-website-1
+$ ssh root@ip mv /usr/local/bin/practicalgo-website-1 /usr/local/bin/practicalgo-website
+</code></pre></div><p>I get around the &ldquo;Text file busy&rdquo; error by creating a temporary file and then using the <code>mv</code> command which uses
 the atomic <a href="https://stackoverflow.com/questions/7054844/is-rename-atomic#7054851">rename()</a> system call.</p>
 <p>And thanks to <code>slayer/autorestart</code>, my application reloads itself and my new content becomes available to the world wide web!</p>
 <p>To summarize, at this stage, I had:</p>
@@ -198,56 +198,57 @@ connections were being dropped and that is simply not an option.</p>
 But I didn&rsquo;t know enough to  implement it myself. From the README of <code>slayer/autorestart</code>, I saw a reference to an unmaintained project
 <a href="https://github.com/facebookgo/grace">facebookgo/grace</a> which seemed very relevant to what I was looking for. So, I integrated my server with
 the <code>grace/gracehttp</code> package:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;embed&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;log&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;net/http&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/facebookgo/grace/gracehttp&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/slayer/autorestart&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed buy categories code css images posts support tags toc
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed book_cover.jpg go.mod index.html index.xml sitemap.xml
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">siteData</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">logger</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>, <span style="color:#e6db74">&#34;INFO: &#34;</span>, <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Lshortfile</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">listenAddr</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;:8080&#34;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;LISTEN_ADDR&#34;</span>)) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">listenAddr</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;LISTEN_ADDR&#34;</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">staticFileServer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FileServer</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FS</span>(<span style="color:#a6e22e">siteData</span>))
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">staticFileServer</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">srv</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Addr</span>:    <span style="color:#a6e22e">listenAddr</span>,
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">Handler</span>: <span style="color:#a6e22e">mux</span>,
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">autorestart</span>.<span style="color:#a6e22e">RestartFunc</span> = <span style="color:#a6e22e">autorestart</span>.<span style="color:#a6e22e">SendSIGUSR2</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">restart</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">autorestart</span>.<span style="color:#a6e22e">GetNotifier</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">restart</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Detected change in binary. Restarting.&#34;</span>)
-</span></span><span style="display:flex;"><span>	}()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">autorestart</span>.<span style="color:#a6e22e">StartWatcher</span>()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">gracehttp</span>.<span style="color:#a6e22e">SetLogger</span>(<span style="color:#a6e22e">logger</span>)
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;Server terminating: %v&#34;</span>, <span style="color:#a6e22e">gracehttp</span>.<span style="color:#a6e22e">Serve</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">srv</span>))
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>I alluded to running the Go server as a systemd service above, here&rsquo;s the systemd service file:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;embed&#34;</span>
+	<span style="color:#e6db74">&#34;log&#34;</span>
+	<span style="color:#e6db74">&#34;net/http&#34;</span>
+	<span style="color:#e6db74">&#34;os&#34;</span>
+
+	<span style="color:#e6db74">&#34;github.com/facebookgo/grace/gracehttp&#34;</span>
+	<span style="color:#e6db74">&#34;github.com/slayer/autorestart&#34;</span>
+)
+
+<span style="color:#75715e">//go:embed buy categories code css images posts support tags toc
+</span><span style="color:#75715e">//go:embed book_cover.jpg go.mod index.html index.xml sitemap.xml
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">siteData</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">logger</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>, <span style="color:#e6db74">&#34;INFO: &#34;</span>, <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Lshortfile</span>)
+	<span style="color:#a6e22e">listenAddr</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;:8080&#34;</span>
+	<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;LISTEN_ADDR&#34;</span>)) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span> {
+		<span style="color:#a6e22e">listenAddr</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getenv</span>(<span style="color:#e6db74">&#34;LISTEN_ADDR&#34;</span>)
+
+	}
+	<span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+	<span style="color:#a6e22e">staticFileServer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FileServer</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">FS</span>(<span style="color:#a6e22e">siteData</span>))
+	<span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">staticFileServer</span>)
+
+	<span style="color:#a6e22e">srv</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Server</span>{
+		<span style="color:#a6e22e">Addr</span>:    <span style="color:#a6e22e">listenAddr</span>,
+		<span style="color:#a6e22e">Handler</span>: <span style="color:#a6e22e">mux</span>,
+	}
+
+	<span style="color:#a6e22e">autorestart</span>.<span style="color:#a6e22e">RestartFunc</span> = <span style="color:#a6e22e">autorestart</span>.<span style="color:#a6e22e">SendSIGUSR2</span>
+	<span style="color:#a6e22e">restart</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">autorestart</span>.<span style="color:#a6e22e">GetNotifier</span>()
+	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+		<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">restart</span>
+		<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Detected change in binary. Restarting.&#34;</span>)
+	}()
+
+	<span style="color:#a6e22e">autorestart</span>.<span style="color:#a6e22e">StartWatcher</span>()
+
+	<span style="color:#a6e22e">gracehttp</span>.<span style="color:#a6e22e">SetLogger</span>(<span style="color:#a6e22e">logger</span>)
+	<span style="color:#a6e22e">logger</span>.<span style="color:#a6e22e">Fatalf</span>(<span style="color:#e6db74">&#34;Server terminating: %v&#34;</span>, <span style="color:#a6e22e">gracehttp</span>.<span style="color:#a6e22e">Serve</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">srv</span>))
+}
+
+</code></pre></div><p>I alluded to running the Go server as a systemd service above, here&rsquo;s the systemd service file:</p>
 <pre tabindex="0"><code>[Unit]
 Description=Practical Go Website
 
 [Service]
-Environment=&#34;LISTEN_ADDR=:8080&#34;
+Environment=&quot;LISTEN_ADDR=:8080&quot;
 ExecStart=/usr/local/bin/practicalgo-website
 User=nobody
 
@@ -289,7 +290,7 @@ scratch. Here&rsquo;s some code, without any documentation <a href="https://gith
 <p>I have a plan to replace my use of both the third party libraries with my code for this server.</p>
 </article>
 <footer id="footer">
-    Post managed in a <a href="https://github.com/practicalgo/website/">git repo</a> | <a href="https://github.com/practicalgo/website/commit/c94dc29d61e2339c425754e77d3a298f05922c69">Last Commit on this post </a>
+    Post managed in a <a href="https://github.com/practicalgo/website/">git repo</a> | <a href="https://github.com/practicalgo/website/commit/5f590b98cac52f6c3271ea5780eda9d3257c214e">Last Commit on this post </a>
   | <a href="https://github.com/practicalgo/website/edit/master/content/posts/blog_internals.md">Edit post</a>
     <p>
     Blog managed via <a href="https://gohugo.io/">Hugo</a> and using a modified version of the <a href="https://themes.gohugo.io/etch/">Etch</a> theme.
