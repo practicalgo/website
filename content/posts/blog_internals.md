@@ -74,7 +74,7 @@ func main() {
 }
 ```
 
-The key standrad libraries used in this iteration were [embed](https://pkg.go.dev/embed) and [net/http](https://pkg.go.dev/net/http).
+The key standard libraries used in this iteration were [embed](https://pkg.go.dev/embed) and [net/http](https://pkg.go.dev/net/http).
 
 The `embed` package allowed me build an executable Go application containing all the blog content. As you can see in the `//go:embed`
 directives, I include all the directories that `hugo` generated in the default, `public` directory inside the application as
