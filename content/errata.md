@@ -29,3 +29,11 @@ Reported as a [GitHub issue](https://github.com/practicalgo/code/issues/5) and
 [fixed]() by [titoe218](https://github.com/titoe218). 
 
 (Thanks titoe218 and daniel-lee-tech)
+
+## Chapter 7
+
+There is a bug in Listing 7.5 described in detail [here](https://github.com/practicalgo/code/issues/11). 
+
+The fixed code is available in the [v1.0.2](https://github.com/practicalgo/code/releases/tag/v1.0.2) release.
+
+(Thanks joergjo)
