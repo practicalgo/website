@@ -30,6 +30,18 @@ Reported as a [GitHub issue](https://github.com/practicalgo/code/issues/5) and
 
 (Thanks titoe218 and daniel-lee-tech)
 
+## Chapter 3
+
+*Page 79 (Electronic and Print)*
+
+Listing 3.9, the call to `registerPackageData()` function is missing the second argument.
+
+The published code is correct, and you can find it [here](https://github.com/practicalgo/code/blob/master/chap3/pkgregister-data/pkgregister_test.go#LL57C2-L57C2).
+
+Reported as a [GitHub issue](https://github.com/practicalgo/code/issues/13).
+
+(Thanks rikyhidayat21) 
+
 ## Chapter 7
 
 There is a bug in Listing 7.5 described in detail [here](https://github.com/practicalgo/code/issues/11). 
