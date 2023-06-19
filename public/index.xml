@@ -36,7 +36,7 @@ If you find a bug or missing source code, please file a GitHub issue or contact 
       <guid>https://practicalgobook.net/posts/blog_internals/</guid>
       <description>I write my blog posts in Markdown format, and then use Hugo static site generator to generate HTML files. The topic of this blog post is how those HTML files are served to you.
 If you happened to come across my GopherCon 2021 lightning talk, this blog post describes the topic in all the gory detail!
- Background Content delivery - Proof of Concept Content Delivery - Caddy as a reverse proxy Automating restart on updates Zero downtime updates Summary  Background When you type in https://practicalgobook.</description>
+Background Content delivery - Proof of Concept Content Delivery - Caddy as a reverse proxy Automating restart on updates Zero downtime updates Summary Background When you type in https://practicalgobook.</description>
     </item>
     
     

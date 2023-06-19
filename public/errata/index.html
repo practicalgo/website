@@ -39,20 +39,30 @@
 <h2 id="chapter-1">Chapter 1</h2>
 <p><em>Page 5 (Electronic and Print)</em></p>
 <p>Current <code>greetUser()</code> function is missing a closing paren in the arguments. The fixed version:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">greetUser</span>(<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Writer</span>) {
-        <span style="color:#75715e">// function body remains same
-</span><span style="color:#75715e"></span>}
-</code></pre></div><p>(Thanks to Max Wolffe for reporting)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">greetUser</span>(<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">config</span>, <span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Writer</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// function body remains same
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>(Thanks to Max Wolffe for reporting)</p>
 <p><em>Listing 1.1</em></p>
 <p>The function definition of <code>validateArgs()</code> should check that, the user hasn&rsquo;t
 specified the <code>-h</code> flag.</p>
 <p>Reported as a <a href="https://github.com/practicalgo/code/issues/5">GitHub issue</a> and
 <a href="">fixed</a> by <a href="https://github.com/titoe218">titoe218</a>.</p>
 <p>(Thanks titoe218 and daniel-lee-tech)</p>
+<h2 id="chapter-3">Chapter 3</h2>
+<p><em>Page 79 (Electronic and Print)</em></p>
+<p>Listing 3.9, the call to <code>registerPackageData()</code> function is missing the second argument.</p>
+<p>The published code is correct, and you can find it <a href="https://github.com/practicalgo/code/blob/master/chap3/pkgregister-data/pkgregister_test.go#LL57C2-L57C2">here</a>.</p>
+<p>Reported as a <a href="https://github.com/practicalgo/code/issues/13">GitHub issue</a>.</p>
+<p>(Thanks rikyhidayat21)</p>
+<h2 id="chapter-7">Chapter 7</h2>
+<p>There is a bug in Listing 7.5 described in detail <a href="https://github.com/practicalgo/code/issues/11">here</a>.</p>
+<p>The fixed code is available in the <a href="https://github.com/practicalgo/code/releases/tag/v1.0.2">v1.0.2</a> release.</p>
+<p>(Thanks joergjo)</p>
 </article>
 <footer id="footer">
-    Post managed in a <a href="https://github.com/practicalgo/website/">git repo</a> | <a href="https://github.com/practicalgo/website/commit/813e120f1363e2467b40f88e91eeefda89a3cea6">Last Commit on this post </a>
-  | <a href="https://github.com/practicalgo/website/edit/master/content/errata.md">Edit post</a>
+    Post managed in a <a href="https://github.com/practicalgo/website/">git repo</a> | <a href="https://github.com/practicalgo/website/commit/4e5071ede312aedd2176ffec900e9d810cc5297a">Last Commit on this post </a>
+  | <a href="https://github.com/practicalgo/website/edit/main/content/errata.md">Edit post</a>
     <p>
     Blog managed via <a href="https://gohugo.io/">Hugo</a> and using a modified version of the <a href="https://themes.gohugo.io/etch/">Etch</a> theme.
     </p>  
