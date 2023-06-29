@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Book website for Practical Go, a book by Amit Saha">
+    
+    <link rel="shortcut icon" href="https://practicalgobook.net/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <title>Using SQLite from Go</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://practicalgobook.net">Practical Go - Book Website</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/posts" title="">Blog</a>
+            </li><li>
+                <a href="/buy" title="">Buy the book!</a>
+            </li><li>
+                <a href="/code" title="">Code</a>
+            </li><li>
+                <a href="/errata" title="">Errata</a>
+            </li><li>
+                <a href="/support" title="">Support</a>
+            </li><li>
+                <a href="/toc" title="">Table of Contents</a>
+            </li><li>
+                <a href="/index.xml" title="">Subscribe (RSS)</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>Using SQLite from Go</h1><time>June 29, 2023</time></header><p>In the book, we used MySQL server as a way to store relational data from our applications. In this post, we will see how to use work with SQLite from Go.</p>
+<p>The demo code used is available in this <a href="https://github.com/practicalgo/go-sqlite-demo">repository</a>.</p>
+<p>The table names and operations are intentionally chosen to losely match that of the official Go Project tutorial, <a href="https://go.dev/doc/tutorial/database-access">Accessing a relational database</a> which uses MySQL as the database server.</p>
+<p>Let&rsquo;s get started!</p>
+<ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#initialize-your-module">Initialize your module</a></li>
+<li><a href="#initializing-the-database">Initializing the database</a></li>
+<li><a href="#types-for-album">Types for Album</a></li>
+<li><a href="#inserting-data">Inserting data</a></li>
+<li><a href="#querying-multiple-rows">Querying multiple rows</a></li>
+<li><a href="#query-for-a-single-row">Query for a single row</a></li>
+<li><a href="#demo-of-the-application">Demo of the application</a></li>
+<li><a href="#using-sqlite3-to-interact-with-the-database">Using sqlite3 to interact with the database</a></li>
+<li><a href="#using-in-memory-databases-for-testing">Using in-memory databases for testing</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#learn-more">Learn more</a></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>An installation of Go</li>
+<li>A tool to edit your code. Any text editor you have will work fine</li>
+<li>A command terminal to run the <code>go</code> commands from</li>
+<li>(optional) a <code>sqlite3</code> install, see <a href="https://sqlite.org/cli.html">here</a> for instructions.</li>
+</ul>
+<h2 id="overview">Overview</h2>
+<p><a href="https://www.sqlite.org/about.html">SQLite</a> is file-based database engine.</p>
+<p>Thus, we do not have a separate server process for it.</p>
+<p>We will create the database, create a table, insert rows and query them back
+using:</p>
+<ul>
+<li>
+<p><a href="https://pkg.go.dev/database/sql#section-documentation">database/sql</a></p>
+</li>
+<li>
+<p><a href="https://pkg.go.dev/modernc.org/sqlite">pkg.go.dev/modernc.org/sqlite</a>: I choose
+this package because it&rsquo;s a cgo-free Go implementation of SQLite. Thus, installing
+it doesn&rsquo;t require you to have a working C compiler, to start with. What&rsquo;s interesting
+is this bit of text from the <a href="https://sqlite.org/index.html">sqlite</a> website:</p>
+<blockquote>
+<p>SQLite is a C-language library &hellip;</p>
+</blockquote>
+<p>Thus, <code>modernc.org/sqlite</code> is a Go implementation of SQLite.</p>
+</li>
+</ul>
+<h2 id="initialize-your-module">Initialize your module</h2>
+<ul>
+<li>Create a directory for the go module</li>
+<li>Create a go module inside it using <code>go mod init github.com/practicalgo/go-sqlite-demo</code></li>
+<li>Fetch the sqlite module, <code>go get modernc.org/sqlite</code></li>
+</ul>
+<h2 id="initializing-the-database">Initializing the database</h2>
+<p>To initialize the database, i.e. to create the file which will be used for the database,
+import the two libraries:</p>
+<ul>
+<li><code>database/sql</code></li>
+<li>unnamed import of <code>modernc.org/sqlite</code> to register the <code>sqlite</code> SQL <a href="https://pkg.go.dev/database/sql/driver">driver</a></li>
+<li>call the <code>sql.Open()</code> function with specifying <code>sqlite</code> as the driver (the first argument) and the file
+path as the second argument</li>
+</ul>
+<p>Once we have initialized the database, we can create a table, <code>album</code> using the
+<a href="https://pkg.go.dev/database/sql#DB.ExecContext"><code>ExecContext()</code></a> method:</p>
+<p>This is a code snippet from <code>app.go</code> which encapsulates the initialization in a function, <code>initDatabase()</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;database/sql&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span> <span style="color:#e6db74">&#34;modernc.org/sqlite&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">db</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">sql</span>.<span style="color:#a6e22e">DB</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">initDatabase</span>(<span style="color:#a6e22e">dbPath</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">db</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">sql</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;sqlite&#34;</span>, <span style="color:#a6e22e">dbPath</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">ExecContext</span>(
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(),
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">`CREATE TABLE IF NOT EXISTS album (
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">			id INTEGER PRIMARY KEY AUTOINCREMENT, 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">			title TEXT NOT NULL, 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">			artist TEXT NOT NULL, 
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">			price REAL NOT NULL
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">		)`</span>,
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="types-for-album">Types for Album</h2>
+<p>We have defined two types for each album. The first, <code>Album</code> is to represent an album we are going to add
+to the table:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Album</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Title</span>  <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Artist</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Price</span>  <span style="color:#66d9ef">float32</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The second type, <code>AlbumDbRow</code> is used to represent an album that we <em>retrieve</em> from the database:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">AlbumDbRow</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">ID</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Album</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>An album retrieved from the database, in addition to all the fields of <code>Album</code> will have an additional field, <code>ID</code> representing their identifier (a row number) in the album. Thus, we embed the <code>Album</code>
+struct and define <code>ID</code> as an additional field.</p>
+<h2 id="inserting-data">Inserting data</h2>
+<p>Once we have created the table, we can insert data using the <code>INSERT</code> SQL statement.</p>
+<p>To execute the SQL statement, we will once again use the <code>db.ExecContext()</code> method.</p>
+<p>The <code>addAlbum()</code> function in <code>app.go</code> shows how we can do so:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">addAlbum</span>(<span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Album</span>) (<span style="color:#66d9ef">int64</span>, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">result</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">ExecContext</span>(
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(),
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">`INSERT INTO album (title, artist, price) VALUES (?,?,?);`</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">Title</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">Artist</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">Price</span>,
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// rest of the function
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h2 id="querying-multiple-rows">Querying multiple rows</h2>
+<p>To query data, we will execute the <code>SELECT</code> statement.</p>
+<p>As we expect to retrieve multiple rows, we use the <a href="https://pkg.go.dev/database/sql#DB.QueryContext"><code>db.QueryContext()</code></a> method.</p>
+<p>The <code>albumsByArtist()</code> function shows an example, with some comments in line</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">albumsByArtist</span>(<span style="color:#a6e22e">artist</span> <span style="color:#66d9ef">string</span>) ([]<span style="color:#a6e22e">AlbumDbRow</span>, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// this slice will contain all the albums retrieved
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">albums</span> []<span style="color:#a6e22e">AlbumDbRow</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">rows</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">QueryContext</span>(
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(),
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">`SELECT * FROM album WHERE artist=?;`</span>, <span style="color:#a6e22e">artist</span>,
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">rows</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// rest of the function
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>The returned value, <code>rows</code> is an object of type <a href="https://pkg.go.dev/database/sql#Rows"><code>*sql.Rows</code></a> which
+we then iterate over using a for loop and calling the <a href="https://pkg.go.dev/database/sql#Rows.Next"><code>rows.Next()</code></a> method.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// we iterate over each row retrieved, scanning each row
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// into an object of type album, successively appending each
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// scanned album into a slice, albums[]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">rows</span>.<span style="color:#a6e22e">Next</span>() {
+</span></span><span style="display:flex;"><span>		
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">album</span> <span style="color:#a6e22e">AlbumDbRow</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rows</span>.<span style="color:#a6e22e">Scan</span>(
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">ID</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">Title</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">Artist</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">Price</span>,
+</span></span><span style="display:flex;"><span>		); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">albums</span> = append(<span style="color:#a6e22e">albums</span>, <span style="color:#a6e22e">album</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">albums</span>, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="query-for-a-single-row">Query for a single row</h2>
+<p>When we expect only one row to be returned by a <code>SELECT</code> query, we use the
+<a href="https://pkg.go.dev/database/sql#DB.QueryRowContext"><code>db.QueryRowContext()</code></a> method.
+If the query returns more than one row, when we call the <code>Scan()</code> method, the rest
+of the rows are discarded.</p>
+<p>The <code>albumByID()</code> function is an example demonstrating how to query a single row:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">albumByID</span>(<span style="color:#a6e22e">id</span> <span style="color:#66d9ef">int</span>) (<span style="color:#a6e22e">AlbumDbRow</span>, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">album</span> <span style="color:#a6e22e">AlbumDbRow</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">row</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">QueryRowContext</span>(
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(),
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">`SELECT * FROM album WHERE id=?`</span>, <span style="color:#a6e22e">id</span>,
+</span></span><span style="display:flex;"><span>	)
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">row</span>.<span style="color:#a6e22e">Scan</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">ID</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">Title</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">Artist</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">Price</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// error handling
+</span></span></span></code></pre></div><h2 id="demo-of-the-application">Demo of the application</h2>
+<p>Clone or download the example code from <a href="https://github.com/practicalgo/go-sqlite-demo">here</a>.</p>
+<p>Build and run:</p>
+<pre tabindex="0"><code>$ go build
+
+$ SQLITE_DB_PATH=app.db ./go-sqlite-demo
+
+2023/06/27 13:13:54 recreating table: album
+database initialized..
+test data inserted..
+querying test data by album ID..
+{1 {Giant Steps John Coltrane 63.99}}
+{2 {Jeru Gerry Mulligan 17.99}}
+{3 {Sarah Vaughan Sarah Vaughan 34.98}}
+{4 {Blue Train John Coltrane 56.99}}
+</code></pre><p>You will see that a new file, <code>app.db</code> has been created in the same directory.</p>
+<h2 id="using-sqlite3-to-interact-with-the-database">Using sqlite3 to interact with the database</h2>
+<p>If you have installed <code>sqlite3</code>, you can interact with <code>app.db</code> using it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">$</span> sqlite3 app.db
+</span></span><span style="display:flex;"><span>SQLite <span style="color:#66d9ef">version</span> <span style="color:#ae81ff">3</span>.<span style="color:#ae81ff">42</span>.<span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2023</span><span style="color:#f92672">-</span><span style="color:#ae81ff">05</span><span style="color:#f92672">-</span><span style="color:#ae81ff">16</span> <span style="color:#ae81ff">12</span>:<span style="color:#ae81ff">36</span>:<span style="color:#ae81ff">15</span>
+</span></span><span style="display:flex;"><span>Enter <span style="color:#e6db74">&#34;.help&#34;</span> <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">usage</span> hints.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sqlite<span style="color:#f92672">&gt;</span> .tables
+</span></span><span style="display:flex;"><span>album
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sqlite<span style="color:#f92672">&gt;</span> .<span style="color:#66d9ef">database</span>
+</span></span><span style="display:flex;"><span>main: <span style="color:#f92672">/</span>home<span style="color:#f92672">/</span>echorand<span style="color:#f92672">/</span><span style="color:#66d9ef">work</span><span style="color:#f92672">/</span>github.com<span style="color:#f92672">/</span>practicalgo<span style="color:#f92672">/</span><span style="color:#66d9ef">go</span><span style="color:#f92672">-</span>sqlite<span style="color:#f92672">-</span>demo<span style="color:#f92672">/</span>app.db r<span style="color:#f92672">/</span>w
+</span></span><span style="display:flex;"><span>sqlite<span style="color:#f92672">&gt;</span> .<span style="color:#66d9ef">schema</span> album
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> album (
+</span></span><span style="display:flex;"><span>                        id INTEGER <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> AUTOINCREMENT,
+</span></span><span style="display:flex;"><span>                        title TEXT <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>                        artist TEXT <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+</span></span><span style="display:flex;"><span>                        price REAL <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>
+</span></span><span style="display:flex;"><span>                );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sqlite<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> album;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span><span style="color:#f92672">|</span>Giant Steps<span style="color:#f92672">|</span>John Coltrane<span style="color:#f92672">|</span><span style="color:#ae81ff">63</span>.<span style="color:#ae81ff">9900016784668</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2</span><span style="color:#f92672">|</span>Jeru<span style="color:#f92672">|</span>Gerry Mulligan<span style="color:#f92672">|</span><span style="color:#ae81ff">17</span>.<span style="color:#ae81ff">9899997711182</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">3</span><span style="color:#f92672">|</span>Sarah Vaughan<span style="color:#f92672">|</span>Sarah Vaughan<span style="color:#f92672">|</span><span style="color:#ae81ff">34</span>.<span style="color:#ae81ff">9799995422363</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">4</span><span style="color:#f92672">|</span>Blue Train<span style="color:#f92672">|</span>John Coltrane<span style="color:#f92672">|</span><span style="color:#ae81ff">56</span>.<span style="color:#ae81ff">9900016784668</span>
+</span></span></code></pre></div><h2 id="using-in-memory-databases-for-testing">Using in-memory databases for testing</h2>
+<p>To write tests for an application that uses SQLite database, we can use an in-memory database.</p>
+<p>To do so, we will use the <a href="https://www.sqlite.org/inmemorydb.html">special filename</a>, <code>:memory:</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">initDatabase</span>(<span style="color:#e6db74">&#34;:memory:&#34;</span>)
+</span></span></code></pre></div><p>See an example test function in <a href="https://github.com/practicalgo/go-sqlite-demo/blob/143517b632748970648f3129124ea8d1d827c927/app_test.go#L8">app_test.go</a>.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In this post, we learned how to use SQLite to store data from a Go application.</p>
+<p>We used <code>database/sql</code> and the cgo free <code>https://gitlab.com/cznic/sqlite</code> to read and write
+data from a file-based SQLite database.</p>
+<p>We also saw how we can use an in-memory database for testing.</p>
+<h2 id="learn-more">Learn more</h2>
+<ul>
+<li><a href="https://www.sqlite.org/about.html">SQLite</a></li>
+<li><a href="https://pkg.go.dev/database/sql#pkg-overview">database/sql</a></li>
+<li><a href="https://gitlab.com/cznic/sqlite">https://gitlab.com/cznic/sqlite</a></li>
+<li><a href="https://eli.thegreenplace.net/2020/embedding-in-go-part-1-structs-in-structs/">Embedding struct in structs</a></li>
+<li><a href="https://earthly.dev/blog/golang-sqlite/">Golang SQLite database/sql</a> uses another popular package, github.com/mattn/go-sqlite3
+to work with SQLite from Go</li>
+</ul>
+</article>
+<footer id="footer">
+    Post managed in a <a href="https://github.com/practicalgo/website/">git repo</a> | <a href="https://github.com/practicalgo/website/commit/">Last Commit on this post </a>
+  | <a href="https://github.com/practicalgo/website/edit/main/content/posts/go-sqlite-no-cgo.md">Edit post</a>
+    <p>
+    Blog managed via <a href="https://gohugo.io/">Hugo</a> and using a modified version of the <a href="https://themes.gohugo.io/etch/">Etch</a> theme.
+    </p>  
+</footer>
+
+        </main><footer id="footer">
+    
+</footer>
+</body>
+</html>

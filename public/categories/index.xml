@@ -6,9 +6,23 @@
     <description>Recent content in Categories on Practical Go - Book Website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 31 Aug 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 29 Jun 2023 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://practicalgobook.net/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+    <item>
+      <title>Using SQLite from Go</title>
+      <link>https://practicalgobook.net/posts/go-sqlite-no-cgo/</link>
+      <pubDate>Thu, 29 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://practicalgobook.net/posts/go-sqlite-no-cgo/</guid>
+      <description>In the book, we used MySQL server as a way to store relational data from our applications. In this post, we will see how to use work with SQLite from Go.
+The demo code used is available in this repository.
+The table names and operations are intentionally chosen to losely match that of the official Go Project tutorial, Accessing a relational database which uses MySQL as the database server.
+Let&amp;rsquo;s get started!</description>
+    </item>
     
     
     
