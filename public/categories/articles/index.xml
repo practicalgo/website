@@ -6,9 +6,20 @@
     <description>Recent content in articles on Practical Go - Book Website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 29 Jun 2023 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 19 Sep 2023 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://practicalgobook.net/categories/articles/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+    <item>
+      <title>Working with URL encoded form values</title>
+      <link>https://practicalgobook.net/posts/go-url-encoded-form-values/</link>
+      <pubDate>Tue, 19 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://practicalgobook.net/posts/go-url-encoded-form-values/</guid>
+      <description>In the book, we discussed how to send and received multipart form data. That is, forms containing both text fields and file uploads, typically using the content type as multipart/form-data. When we are working with only text fields, it is sufficient to instead use the content type, application/x-www-form-urlencoded and send the data as a URL encoded set of key value pairs. For example, as described by the MDN article, say=Hi&amp;amp;to=Rheo will be the request payload for a form with two text fields, say and to with the values, Hi and Rheo respectively.</description>
+    </item>
     
     
     

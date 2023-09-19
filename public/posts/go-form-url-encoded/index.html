@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Book website for Practical Go, a book by Amit Saha">
+    
+    <link rel="shortcut icon" href="https://practicalgobook.net/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.min.css">
+
+    <title>Working with form URL encoded values</title>
+</head>
+<body><header id="banner">
+    <h2><a href="https://practicalgobook.net">Practical Go - Book Website</a></h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="/posts" title="">Blog</a>
+            </li><li>
+                <a href="/buy" title="">Buy the book!</a>
+            </li><li>
+                <a href="/code" title="">Code</a>
+            </li><li>
+                <a href="/errata" title="">Errata</a>
+            </li><li>
+                <a href="/support" title="">Support</a>
+            </li><li>
+                <a href="/toc" title="">Table of Contents</a>
+            </li><li>
+                <a href="/index.xml" title="">Subscribe (RSS)</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main id="content">
+<article>
+    <header id="post-header">
+        <h1>Working with form URL encoded values</h1><time>September 19, 2023</time></header><p>In the book, we discussed how to send and received multipart form data. That is,
+forms containing both text fields and file uploads, typically using the content
+type as <code>multipart/form-data</code>. When we are working with only text fields, it is
+sufficient to instead use the content type, <code>application/x-www-form-urlencoded</code>
+and send the data as a <em>URL encoded set of key value pairs</em>. For example, as
+described by the <a href="https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_and_retrieving_form_data#on_the_client_side_defining_how_to_send_the_data">MDN article</a>,
+<code>say=Hi&amp;to=Rheo</code> will be the request payload for a form with two text fields, <code>say</code> and <code>to</code> with the values,
+<code>Hi</code> and <code>Rheo</code> respectively.</p>
+<p>In this blog post, we will write a client and a server to send and process form data.</p>
+<p>Let&rsquo;s get started!</p>
+<ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#reading-url-encoded-form-data-in-a-go-server">Reading URL encoded form data in a Go server</a></li>
+<li><a href="#using-a-browser-as-the-client">Using a browser as the client</a></li>
+<li><a href="#sending-url-encoded-form-data-from-a-go-client">Sending URL encoded form data from a Go client</a></li>
+<li><a href="#learn-more">Learn more</a></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>An installation of Go</li>
+<li>A tool to edit your code. Any text editor you have will work fine</li>
+<li>A command terminal to run the <code>go</code> commands from</li>
+</ul>
+<h2 id="reading-url-encoded-form-data-in-a-go-server">Reading URL encoded form data in a Go server</h2>
+<p>Reading URL encoded form data in a server&rsquo;s handler function involves two key steps:</p>
+<ol>
+<li>Call <a href="https://pkg.go.dev/net/http#Request.ParseForm"><code>ParseForm()</code></a> method of the request object</li>
+<li>Then, retrieve the values of the fields using <a href="https://pkg.go.dev/net/http#Request.FormValue"><code>FormValue()</code></a></li>
+</ol>
+<p>Example code snippet:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">handleForm</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// this will look for application/x-www-form-urlencoded
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// content type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">ParseForm</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// if there was an error here, we return the error
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#75715e">// as response along with a 400 http response code
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>(), <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusBadRequest</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// once the form has been parsed correctly
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// we can obtain the form fields  using
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// req.FormValue passing the field name as the key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// see ./post-method.html for the field names
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// it&#39;s worth noting here that FormValue() will return
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// the first value if there are multiple values specified
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// in the request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// if you want to access the multiple values specified,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// use req.Form directly (see https://pkg.go.dev/net/http#Request)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">say</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">FormValue</span>(<span style="color:#e6db74">&#34;say&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">to</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">FormValue</span>(<span style="color:#e6db74">&#34;to&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// do something with the values read
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    ..
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>You can find the complete code for the form handler in
+<a href="https://github.com/practicalgo/form-url-encoded-demo">form_handler.go</a>.</p>
+<p>To run the application:</p>
+<pre tabindex="0"><code>go build
+./go-form-url-encoded.md # or .\go-form-url-encoded.exe 
+</code></pre><h2 id="using-a-browser-as-the-client">Using a browser as the client</h2>
+<p>First, let&rsquo;s make a request to the server from a browser by visiting http://localhost:8000.</p>
+<p><a href="https://youtu.be/UX-ZWlq36EQ">Here</a> is a video demonstration of using the application from a
+browser.</p>
+<p>Key points to note from the above video are:</p>
+<ol>
+<li>The &ldquo;raw&rdquo; request data (payload) is: <code>say=Hi&amp;to=Rheo</code></li>
+<li>The content-type header is set as, <code>Content-Type: application/x-www-form-urlencoded</code></li>
+</ol>
+<p>Both are automatically done for us when we click on the &ldquo;Send my greetings&rdquo; button.</p>
+<h2 id="sending-url-encoded-form-data-from-a-go-client">Sending URL encoded form data from a Go client</h2>
+<p>Now, let&rsquo;s say you want to write a test for the <code>handleForm()</code> handler function.
+You will need to send the relevant data as URL encoded form fields. Here is
+a code snippet showing you how:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">TestHandleForm</span>(<span style="color:#a6e22e">t</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">testing</span>.<span style="color:#a6e22e">T</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">w</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">httptest</span>.<span style="color:#a6e22e">NewRecorder</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// set the key value pairs
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">formBody</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">Values</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;say&#34;</span>: []<span style="color:#66d9ef">string</span>{<span style="color:#e6db74">&#34;hi&#34;</span>}, <span style="color:#75715e">// we only have a single element, but these need to be a slice
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#e6db74">&#34;to&#34;</span>:  []<span style="color:#66d9ef">string</span>{<span style="color:#e6db74">&#34;rheo&#34;</span>}, <span style="color:#75715e">// same as above
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">dataReader</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">formBody</span>.<span style="color:#a6e22e">Encode</span>() <span style="color:#75715e">// this perform the URL encoding and returns us a string
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">req</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">httptest</span>.<span style="color:#a6e22e">NewRequest</span>(
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">MethodPost</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#e6db74">&#34;http://localhost&#34;</span>,
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#a6e22e">dataReader</span>), <span style="color:#75715e">// we need a io.Reader
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// set the content-type header
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#e6db74">&#34;Content-Type&#34;</span>, <span style="color:#e6db74">&#34;application/x-www-form-urlencoded&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">handleForm</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">req</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// rest of the test
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>You can find the complete code for the form handler test function in
+<a href="https://github.com/practicalgo/form-url-encoded-demo">form_handler_test.go</a>.</p>
+<p>Outside of test functions, you can use the same approach with <code>http.NewRequest</code> or
+<code>http.NewRequestWithContext</code>.</p>
+<p>Key references:</p>
+<ul>
+<li><a href="https://pkg.go.dev/net/url#Values"><code>url.Values</code></a> and <a href="https://pkg.go.dev/net/url#Values.Encode"><code>Encode()</code></a>
+method</li>
+<li><a href="https://pkg.go.dev/strings#NewReader"><code>strings.NewReader()</code></a></li>
+</ul>
+<h2 id="learn-more">Learn more</h2>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_and_retrieving_form_data">Sending and retrieving form data</a></li>
+</ul>
+</article>
+<footer id="footer">
+    Post managed in a <a href="https://github.com/practicalgo/website/">git repo</a> | <a href="https://github.com/practicalgo/website/commit/">Last Commit on this post </a>
+  | <a href="https://github.com/practicalgo/website/edit/main/content/posts/go-form-url-encoded.md">Edit post</a>
+    <p>
+    Blog managed via <a href="https://gohugo.io/">Hugo</a> and using a modified version of the <a href="https://themes.gohugo.io/etch/">Etch</a> theme.
+    </p>  
+</footer>
+
+        </main><footer id="footer">
+    
+</footer>
+</body>
+</html>
