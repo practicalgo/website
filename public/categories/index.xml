@@ -18,7 +18,14 @@
       <pubDate>Tue, 19 Sep 2023 00:00:00 +0000</pubDate>
       
       <guid>https://practicalgobook.net/posts/go-url-encoded-form-values/</guid>
-      <description>In the book, we discussed how to send and received multipart form data. That is, forms containing both text fields and file uploads, typically using the content type as multipart/form-data. When we are working with only text fields, it is sufficient to instead use the content type, application/x-www-form-urlencoded and send the data as a URL encoded set of key value pairs. For example, as described by the MDN article, say=Hi&amp;amp;to=Rheo will be the request payload for a form with two text fields, say and to with the values, Hi and Rheo respectively.</description>
+      <description>&lt;p&gt;In the book, we discussed how to send and received multipart form data. That is,
+forms containing both text fields and file uploads, typically using the content
+type as &lt;code&gt;multipart/form-data&lt;/code&gt;. When we are working with only text fields, it is
+sufficient to instead use the content type, &lt;code&gt;application/x-www-form-urlencoded&lt;/code&gt;
+and send the data as a &lt;em&gt;URL encoded set of key value pairs&lt;/em&gt;. For example, as
+described by the &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_and_retrieving_form_data#on_the_client_side_defining_how_to_send_the_data&#34;&gt;MDN article&lt;/a&gt;,
+&lt;code&gt;say=Hi&amp;amp;to=Rheo&lt;/code&gt; will be the request payload for a form with two text fields, &lt;code&gt;say&lt;/code&gt; and &lt;code&gt;to&lt;/code&gt; with the values,
+&lt;code&gt;Hi&lt;/code&gt; and &lt;code&gt;Rheo&lt;/code&gt; respectively.&lt;/p&gt;</description>
     </item>
     
     
@@ -29,10 +36,10 @@
       <pubDate>Thu, 29 Jun 2023 00:00:00 +0000</pubDate>
       
       <guid>https://practicalgobook.net/posts/go-sqlite-no-cgo/</guid>
-      <description>In the book, we used MySQL server as a way to store relational data from our applications. In this post, we will see how to use work with SQLite from Go.
-The demo code used is available in this repository.
-The table names and operations are intentionally chosen to losely match that of the official Go Project tutorial, Accessing a relational database which uses MySQL as the database server.
-Let&amp;rsquo;s get started!</description>
+      <description>&lt;p&gt;In the book, we used MySQL server as a way to store relational data from our applications. In this post, we will see how to use work with SQLite from Go.&lt;/p&gt;
+&lt;p&gt;The demo code used is available in this &lt;a href=&#34;https://github.com/practicalgo/go-sqlite-demo&#34;&gt;repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The table names and operations are intentionally chosen to losely match that of the official Go Project tutorial, &lt;a href=&#34;https://go.dev/doc/tutorial/database-access&#34;&gt;Accessing a relational database&lt;/a&gt; which uses MySQL as the database server.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s get started!&lt;/p&gt;</description>
     </item>
     
     
@@ -43,11 +50,14 @@ Let&amp;rsquo;s get started!</description>
       <pubDate>Wed, 31 Aug 2022 00:00:00 +0000</pubDate>
       
       <guid>https://practicalgobook.net/posts/new_code_release_1_1/</guid>
-      <description>I have published a new version of the source code accompanying the book.
-You can find the v1.0.1 release here.
-I am extremely thankful to the folks who reported and participated in the issues and pull requests.
-The errata page has also been updated with a new error reported.
-If you find a bug or missing source code, please file a GitHub issue or contact me at mail@practicalgobook.net.</description>
+      <description>&lt;p&gt;I have published a new version of the source code accompanying the book.&lt;/p&gt;
+&lt;p&gt;You can find the v1.0.1 release &lt;a href=&#34;https://github.com/practicalgo/code/releases/tag/v1.0.1&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I am extremely thankful to the folks who reported and participated in the issues
+and pull requests.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;https://practicalgobook.net/errata/&#34;&gt;errata&lt;/a&gt; page has also been updated
+with a new error reported.&lt;/p&gt;
+&lt;p&gt;If you find a bug or missing source code, please file a &lt;a href=&#34;https://github.com/practicalgo/code/issues&#34;&gt;GitHub issue&lt;/a&gt;
+or contact me at &lt;a href=&#34;mailto:mail@practicalgobook.net&#34;&gt;mail@practicalgobook.net&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     
     
@@ -60,9 +70,23 @@ If you find a bug or missing source code, please file a GitHub issue or contact 
       <pubDate>Mon, 30 May 2022 00:00:00 +0000</pubDate>
       
       <guid>https://practicalgobook.net/posts/blog_internals/</guid>
-      <description>I write my blog posts in Markdown format, and then use Hugo static site generator to generate HTML files. The topic of this blog post is how those HTML files are served to you.
-If you happened to come across my GopherCon 2021 lightning talk, this blog post describes the topic in all the gory detail!
-Background Content delivery - Proof of Concept Content Delivery - Caddy as a reverse proxy Automating restart on updates Zero downtime updates Summary Background When you type in https://practicalgobook.</description>
+      <description>&lt;p&gt;I write my blog posts in Markdown format,  and then use &lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt; static site
+generator to generate HTML files. The topic of this blog post is how those HTML files are served
+to you.&lt;/p&gt;
+&lt;p&gt;If you happened to come across my &lt;a href=&#34;https://www.youtube.com/watch?v=y6VnTM1f2cc&#34;&gt;GopherCon 2021 lightning talk&lt;/a&gt;,
+this blog post describes the topic in all the gory detail!&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#background&#34;&gt;Background&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#content-delivery---proof-of-concept&#34;&gt;Content delivery - Proof of Concept&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#content-delivery---caddy-as-a-reverse-proxy&#34;&gt;Content Delivery - Caddy as a reverse proxy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#automating-restart-on-updates&#34;&gt;Automating restart on updates&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#zero-downtime-updates&#34;&gt;Zero downtime updates&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#summary&#34;&gt;Summary&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;p&gt;When you type in &lt;a href=&#34;https://practicalgobook.net&#34;&gt;https://practicalgobook.net&lt;/a&gt; in your browser (or click it from somewhere), a translation,
+commonly known as DNS resolution happens. As a result of this translation, the browser gets back
+an IP address:&lt;/p&gt;</description>
     </item>
     
     
@@ -73,8 +97,15 @@ Background Content delivery - Proof of Concept Content Delivery - Caddy as a rev
       <pubDate>Wed, 22 Dec 2021 00:00:00 +0000</pubDate>
       
       <guid>https://practicalgobook.net/posts/hello_world/</guid>
-      <description>Hello everyone. &amp;ldquo;Practical Go: Building Scalable Network and Non-Network Applications&amp;rdquo; is now out electronically as well as in print.
-The book targets readers who have learned the Go language basics - syntax, understanding of types, being able to write functions (details are available in the &amp;ldquo;Getting started&amp;rdquo; chapter - but essentially, just a passing familiarity with the language is enough I think). I say that and reasonably confidently since that&amp;rsquo;s where I was when I started writing this book.</description>
+      <description>&lt;p&gt;Hello everyone. &amp;ldquo;Practical Go: Building Scalable Network and Non-Network Applications&amp;rdquo; is now out
+electronically as well as in print.&lt;/p&gt;
+&lt;p&gt;The book targets readers who have learned the Go language basics - syntax, understanding of types,
+being able to write functions (details are available in the &amp;ldquo;Getting started&amp;rdquo; chapter - but essentially,
+just a passing familiarity with the language is enough I think). I say that and reasonably confidently
+since that&amp;rsquo;s where I was when I started writing this book. I wrote this book, not to share with you things
+I already knew - far from it. The book is essentially a documentation of my journey of learning Go and applying
+it to solve problems which I think based on my experience are being solved by folks in the industry a.k.a
+real world today.&lt;/p&gt;</description>
     </item>
     
     

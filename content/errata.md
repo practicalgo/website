@@ -42,6 +42,14 @@ Reported as a [GitHub issue](https://github.com/practicalgo/code/issues/13).
 
 (Thanks rikyhidayat21) 
 
+## Chapter 5
+
+Text on Line 4, the `cd` command contains an additional space. The corrected command is:
+
+`cd chap5/context-metadata`
+
+(Thanks to another book reader, Roy Tobin who wrote to me pointing this out)
+
 ## Chapter 7
 
 There is a bug in Listing 7.5 described in detail [here](https://github.com/practicalgo/code/issues/11). 
