@@ -11,7 +11,7 @@
     <title>The server powering practicalgobook.net</title>
 </head>
 <body><header id="banner">
-    <h2><a href="https://practicalgobook.net">Practical Go - Book Website</a></h2>
+    <h2><a href="https://practicalgobook.net/">Practical Go - Book Website</a></h2>
     <nav>
         <ul>
             <li>
@@ -72,10 +72,10 @@ for implementing advanced features.</p>
 </span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;os&#34;</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed posts code
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed index.html index.xml sitemap.xml
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed categories css images
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">siteData</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed posts code</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed index.html index.xml sitemap.xml</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed categories css images</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">siteData</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">listenAddr</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;:80&#34;</span>
@@ -210,9 +210,9 @@ the <code>grace/gracehttp</code> package:</p>
 </span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;github.com/slayer/autorestart&#34;</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed buy categories code css images posts support tags toc
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed book_cover.jpg go.mod index.html index.xml sitemap.xml
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">siteData</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed buy categories code css images posts support tags toc</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed book_cover.jpg go.mod index.html index.xml sitemap.xml</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">siteData</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">logger</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stdout</span>, <span style="color:#e6db74">&#34;INFO: &#34;</span>, <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Lshortfile</span>)

@@ -11,7 +11,7 @@
     <title>Using SQLite from Go</title>
 </head>
 <body><header id="banner">
-    <h2><a href="https://practicalgobook.net">Practical Go - Book Website</a></h2>
+    <h2><a href="https://practicalgobook.net/">Practical Go - Book Website</a></h2>
     <nav>
         <ul>
             <li>
@@ -76,8 +76,7 @@ this package because it&rsquo;s a cgo-free Go implementation of SQLite. Thus, in
 it doesn&rsquo;t require you to have a working C compiler, to start with. What&rsquo;s interesting
 is this bit of text from the <a href="https://sqlite.org/index.html">sqlite</a> website:</p>
 <blockquote>
-<p>SQLite is a C-language library &hellip;</p>
-</blockquote>
+<p>SQLite is a C-language library &hellip;</p></blockquote>
 <p>Thus, <code>modernc.org/sqlite</code> is a Go implementation of SQLite.</p>
 </li>
 </ul>
@@ -152,16 +151,16 @@ struct and define <code>ID</code> as an additional field.</p>
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(),
 </span></span><span style="display:flex;"><span>		<span style="color:#e6db74">`INSERT INTO album (title, artist, price) VALUES (?,?,?);`</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">Title</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">Artist</span>, <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">Price</span>,
 </span></span><span style="display:flex;"><span>	)
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// rest of the function
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// rest of the function</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="querying-multiple-rows">Querying multiple rows</h2>
 <p>To query data, we will execute the <code>SELECT</code> statement.</p>
 <p>As we expect to retrieve multiple rows, we use the <a href="https://pkg.go.dev/database/sql#DB.QueryContext"><code>db.QueryContext()</code></a> method.</p>
 <p>The <code>albumsByArtist()</code> function shows an example, with some comments in line</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">albumsByArtist</span>(<span style="color:#a6e22e">artist</span> <span style="color:#66d9ef">string</span>) ([]<span style="color:#a6e22e">AlbumDbRow</span>, <span style="color:#66d9ef">error</span>) {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// this slice will contain all the albums retrieved
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// this slice will contain all the albums retrieved</span>
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">albums</span> []<span style="color:#a6e22e">AlbumDbRow</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">rows</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">QueryContext</span>(
 </span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Background</span>(),
@@ -171,15 +170,15 @@ struct and define <code>ID</code> as an additional field.</p>
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#a6e22e">err</span>
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">rows</span>.<span style="color:#a6e22e">Close</span>()
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// rest of the function
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// rest of the function</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>The returned value, <code>rows</code> is an object of type <a href="https://pkg.go.dev/database/sql#Rows"><code>*sql.Rows</code></a> which
 we then iterate over using a for loop and calling the <a href="https://pkg.go.dev/database/sql#Rows.Next"><code>rows.Next()</code></a> method.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// we iterate over each row retrieved, scanning each row
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// into an object of type album, successively appending each
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// scanned album into a slice, albums[]
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// we iterate over each row retrieved, scanning each row</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// into an object of type album, successively appending each</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// scanned album into a slice, albums[]</span>
+</span></span><span style="display:flex;"><span>	
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">rows</span>.<span style="color:#a6e22e">Next</span>() {
 </span></span><span style="display:flex;"><span>		
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">album</span> <span style="color:#a6e22e">AlbumDbRow</span>
@@ -210,8 +209,8 @@ of the rows are discarded.</p>
 </span></span><span style="display:flex;"><span>	
 </span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">row</span>.<span style="color:#a6e22e">Scan</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">ID</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">Title</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">Artist</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">album</span>.<span style="color:#a6e22e">Price</span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// error handling
-</span></span></span></code></pre></div><h2 id="demo-of-the-application">Demo of the application</h2>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// error handling</span>
+</span></span></code></pre></div><h2 id="demo-of-the-application">Demo of the application</h2>
 <p>Clone or download the example code from <a href="https://github.com/practicalgo/go-sqlite-demo">here</a>.</p>
 <p>Build and run:</p>
 <pre tabindex="0"><code>$ go build
