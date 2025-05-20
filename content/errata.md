@@ -44,6 +44,8 @@ Reported as a [GitHub issue](https://github.com/practicalgo/code/issues/13).
 
 ## Chapter 5
 
+*Page 121 (Print)*
+
 Text on Line 4, the `cd` command contains an additional space. The corrected command is:
 
 `cd chap5/context-metadata`
